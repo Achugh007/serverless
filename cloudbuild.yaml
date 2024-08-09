@@ -1,0 +1,21 @@
+steps:
+- name: 'gcr.io/cloud-builders/nodejs'
+  entrypoint: 'bash'
+  args: 
+    [
+      '-c',
+      'npm install && npm run build' # Assuming you have a 'build' script in your package.json
+    ]
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+    [
+      'functions',
+      'deploy',
+      'quoteGenerator', # Replace with your desired Cloud Function name
+      '--region=us-central1', 
+      '--runtime=nodejs14',
+      '--trigger-http',
+      '--entry-point=app' # The entry point is now 'app' since you're using Express
+    ]
+options:
+  logging: CLOUD_LOGGING_ONLY 
